@@ -1,54 +1,69 @@
-# Ex-6-IMPLEMENTATION-OF-THE-BACK-END-OF-THE-COMPILER-
-IMPLEMENTATION OF THE BACK END OF THE COMPILER 
-# Date : 24.10.2024
-# Aim :
-To write a program to implement the back end of the compiler.
+# Ex-5-RECOGNITION-OF-THE-GRAMMAR-anb-where-n-10-USING-YACC
+RECOGNITION OF THE GRAMMAR(anb where n>=10) USING YACC
+# Date: 17.10.2024
+# Aim:
+To write a YACC program to recognize the grammar anb where n>=10.
 # ALGORITHM
-1. Start the program.
-2. Get the three variables from statements and stored in the text file k.txt.
-3. Compile the program and give the path of the source file.
-4. Execute the program.
-5. Target code for the given statement is produced.
-6. Stop the program.
-# PROGRAM
+1.	Start the program.
+2.	Write a program in the vi editor and save it with .l extension.
+3.	In the lex program, write the translation rules for the variables a and b.
+4.	Write a program in the vi editor and save it with .y extension.
+5.	Compile the lex program with lex compiler to produce output file as lex.yy.c. eg $ lex filename.l
+6.	Compile the yacc program with yacc compiler to produce output file as y.tab.c. eg $ yacc –d arith_id.y
+7.	Compile these with the C compiler as gcc lex.yy.c y.tab.c
+8.	Enter a string as input and it is identified as valid or invalid.
+# PROGRAM:
 ```
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
+// EXP5.l file
+%{
+/* Definition section */ #include "y.tab.h"
+%}
 
-int main() {
-int i = 2, j = 0, k = 2, k1 = 0; char ip[10], kk[10];
-FILE *fp;
+/* Rule Section */
+%%
+[aA] {return A;}
+[bB] {return B;}
+\n {return NL;}
+. {return yytext[0];}
+%%
 
-printf("Enter the filename of the intermediate code: "); scanf("%s", kk);
-
-fp = fopen(kk, "r"); if (fp == NULL) {
-printf("\nError in opening the file\n"); return 1;
+int yywrap()
+{
+return 1;
 }
-printf("\nStatement\tTarget Code\n\n"); while (fscanf(fp, "%s", ip) != EOF) {
-printf("%s\tMOV %c,R%d SUB ", ip, ip[i + k], j);
+// EXP5.y file
 
-if (ip[i + 1] == '+')
-printf("ADD "); else
-printf("SUB ");
+%{
+/* Definition section */
+#include<stdio.h> 
+#include<stdlib.h>
+%}
 
-if (islower(ip[i])) printf("%c,R%d\n", ip[i + k1], j);
-else
-printf("%c,%c\n", ip[i], ip[i + 2]);
+%token A B NL
 
-j++;
-k1 = 2;
-k = 0;
+/* Rule Section */
+%%
+stmt: S NL { printf("valid string\n");
+exit(0); }
+;
+S: A S B |;
+%%
+
+int yyerror(char *msg)
+{
+printf("invalid string\n"); exit(0);
+}
+int main()
+{
+printf("enter the string\n"); yyparse();
 }
 
-fclose(fp);
-
-return 0;
-}
 
 ```
 # OUTPUT
-![image](https://github.com/user-attachments/assets/46804f02-64f6-4605-8185-b0f9cf12146e)
+![379688830-efe62914-544c-47f9-bbe7-a36f581beb6a](https://github.com/user-attachments/assets/0ad9fbad-420d-40ac-85f0-abfbe3b2c634)
 
-# Result
-The back end of the compiler is implemented successfully, and the output is verified.
+
+
+# RESULT
+The YACC program to recognize the grammar anb where n>=10 is executed successfully and the output is verified.
